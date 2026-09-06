@@ -1,4 +1,8 @@
-import ArchitectureDiagram from "@/components/ArchitectureDiagram";
+import dynamic from "next/dynamic";
+
+const ArchitectureDiagram = dynamic(() => import("@/components/ArchitectureDiagram"), {
+  loading: () => <div className="mt-10 h-48 animate-pulse rounded bg-steel/20" />,
+});
 
 export default function Stack() {
   return (

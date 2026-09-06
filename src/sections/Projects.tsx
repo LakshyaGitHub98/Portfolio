@@ -1,6 +1,12 @@
-import CaseStudyTabs from "@/components/CaseStudyTabs";
-import DiaPredictPipeline from "@/components/DiaPredictPipeline";
+import dynamic from "next/dynamic";
 import { projects } from "@/data/projects";
+
+const CaseStudyTabs = dynamic(() => import("@/components/CaseStudyTabs"), {
+  loading: () => <div className="mt-5 h-24 animate-pulse rounded bg-steel/20" />,
+});
+const DiaPredictPipeline = dynamic(() => import("@/components/DiaPredictPipeline"), {
+  loading: () => <div className="mt-5 h-16 animate-pulse rounded bg-steel/20" />,
+});
 
 export default function Projects() {
   return (
