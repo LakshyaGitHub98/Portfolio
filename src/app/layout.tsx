@@ -45,7 +45,7 @@ const ibmPlexMonoMedium = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Lakshya — AI & Automation Engineer",
+  title: "Lakshya | AI & Automation Engineer",
   description:
     "AI & Automation Engineer building intelligent platforms and automation systems.",
 };

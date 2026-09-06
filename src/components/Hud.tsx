@@ -35,7 +35,7 @@ export default function Hud({ activeSection = 0, total = 7, coreState = "IDLE" }
         </div>
         <div className="mt-2 h-px bg-steel/60" />
         <div className="mt-2 font-mono text-[0.62rem] leading-none tracking-widest text-fog/60">
-          SYS READOUT — PHASE 05
+          SYS READOUT | PHASE 05
         </div>
       </div>
     </div>
