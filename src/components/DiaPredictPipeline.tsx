@@ -25,13 +25,13 @@ export default function DiaPredictPipeline({ project }: { project: Project }) {
               <li key={step.step} className="relative">
                 <span className="absolute -left-[29px] top-1.5 w-2.5 h-2.5 rounded-full bg-copper border border-void" />
                 <span className="font-mono text-xs tracking-wide text-bone">
-                  {String(i + 1).padStart(2, "0")} — {step.step}
+                  {String(i + 1).padStart(2, "0")}. {step.step}
                 </span>
                 <p className="text-xs text-fog mt-1">{step.detail}</p>
               </li>
             ))}
           </ol>
-          <p className="mt-4 text-xs leading-relaxed text-fog/70">Portfolio demonstration — not clinical or diagnostic guidance.</p>
+          <p className="mt-4 text-xs leading-relaxed text-fog/70">Portfolio demonstration, not clinical or diagnostic guidance.</p>
         </div>
       )}
     </div>
