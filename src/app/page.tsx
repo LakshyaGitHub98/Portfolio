@@ -6,6 +6,7 @@ import Projects from "@/sections/Projects";
 import Stack from "@/sections/Stack";
 import Hero from "@/sections/Hero";
 import Navbar from "@/components/Navbar";
+import CommandBar from "@/components/CommandBar";
 import SceneWrapper from "@/components/SceneWrapper";
 import ScrollAnimations from "@/components/ScrollAnimations";
 import HudWrapper from "@/components/HudWrapper";
@@ -25,6 +26,7 @@ export default function Home() {
         <Contact />
       </main>
       <HudWrapper />
+      <CommandBar />
       <ScrollAnimations />
     </>
   );
