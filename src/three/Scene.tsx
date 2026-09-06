@@ -12,6 +12,11 @@ function CameraRig({ progress }: { progress: number }) {
   const targetZ = useRef(5);
 
   useFrame(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      camera.position.set(0, 0, 5);
+      camera.lookAt(0, 0, 0);
+      return;
+    }
     const p = progress;
     let z: number;
     if (p < 0.15) z = THREE.MathUtils.lerp(5, 2, p / 0.15);
