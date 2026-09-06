@@ -68,6 +68,16 @@ export default function Contact() {
           <Button variant="primary">Send</Button>
         </form>
 
+        <div className="mt-10">
+          <p className="font-mono text-xs tracking-wide text-fog">Prefer a call</p>
+          <a
+            href="tel:+919839953414"
+            className="mt-1 inline-flex items-center font-mono text-sm text-bone hover:text-copper transition-colors"
+          >
+            +91 9839953414
+          </a>
+        </div>
+
         <p className="mt-16 font-mono text-sm text-fog">
           Build. Automate. Iterate.
         </p>
