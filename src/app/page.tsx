@@ -1,20 +1,21 @@
-import dynamic from "next/dynamic";
-import Navbar from "@/components/Navbar";
-import Hero from "@/sections/Hero";
-
-const Hud = dynamic(() => import("@/components/Hud"), { ssr: false });
 import About from "@/sections/About";
-import Engineering from "@/sections/Engineering";
-import Stack from "@/sections/Stack";
-import Projects from "@/sections/Projects";
-import Experience from "@/sections/Experience";
 import Contact from "@/sections/Contact";
+import Engineering from "@/sections/Engineering";
+import Experience from "@/sections/Experience";
+import Projects from "@/sections/Projects";
+import Stack from "@/sections/Stack";
+import Hero from "@/sections/Hero";
+import Navbar from "@/components/Navbar";
+import SceneWrapper from "@/components/SceneWrapper";
+import ScrollAnimations from "@/components/ScrollAnimations";
+import HudWrapper from "@/components/HudWrapper";
 
 export default function Home() {
   return (
     <>
+      <SceneWrapper />
       <Navbar />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <About />
         <Engineering />
@@ -23,7 +24,8 @@ export default function Home() {
         <Experience />
         <Contact />
       </main>
-      <Hud />
+      <HudWrapper />
+      <ScrollAnimations />
     </>
   );
 }

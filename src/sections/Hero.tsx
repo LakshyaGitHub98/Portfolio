@@ -1,7 +1,4 @@
-import dynamic from "next/dynamic";
 import Button from "@/components/Button";
-
-const Scene = dynamic(() => import("@/three/Scene"), { ssr: false });
 
 export default function Hero() {
   return (
@@ -29,10 +26,6 @@ export default function Hero() {
               Explore
             </Button>
           </div>
-        </div>
-
-        <div className="hidden lg:flex items-center justify-center" aria-hidden="true">
-          <Scene />
         </div>
       </div>
     </section>
