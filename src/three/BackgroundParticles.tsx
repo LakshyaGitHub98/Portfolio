@@ -9,7 +9,7 @@ type Props = {
   count?: number;
 };
 
-export default function BackgroundParticles({ count = 150 }: Props) {
+export default function BackgroundParticles({ count = 120 }: Props) {
   const groupRef = useRef<Group>(null);
 
   const { positions, colors } = useMemo(() => {
