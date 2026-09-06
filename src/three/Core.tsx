@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import type { Group } from "three";
 
@@ -16,6 +16,7 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
   const ring2Ref = useRef<Group>(null);
   const ring3Ref = useRef<Group>(null);
   const particlesRef = useRef<Group>(null);
+  const { invalidate } = useThree();
   const mouse = useRef({ x: 0, y: 0 });
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, y: 0 });
@@ -73,8 +74,9 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
   };
 
   useFrame(({ clock }) => {
-    dragOffset.current.x = THREE.MathUtils.lerp(dragOffset.current.x, targetDrag.current.x, isDragging.current ? 0.12 : 0.03);
-    dragOffset.current.y = THREE.MathUtils.lerp(dragOffset.current.y, targetDrag.current.y, isDragging.current ? 0.12 : 0.03);
+    const wasDragging = isDragging.current;
+    dragOffset.current.x = THREE.MathUtils.lerp(dragOffset.current.x, targetDrag.current.x, wasDragging ? 0.12 : 0.03);
+    dragOffset.current.y = THREE.MathUtils.lerp(dragOffset.current.y, targetDrag.current.y, wasDragging ? 0.12 : 0.03);
     if (groupRef.current) {
       if (!isDragging.current) groupRef.current.rotation.y += 0.002;
       else groupRef.current.rotation.y += dragOffset.current.y * 0.02;
@@ -96,6 +98,9 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
     if (ring2Ref.current) ring2Ref.current.rotation.y -= 0.0008;
     if (ring3Ref.current) ring3Ref.current.rotation.y += 0.0012;
     if (particlesRef.current) particlesRef.current.rotation.y += 0.0004;
+    if (wasDragging || Math.abs(dragOffset.current.x) > 0.001 || Math.abs(dragOffset.current.y) > 0.001) {
+      invalidate();
+    }
   });
 
   return (
