@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -47,7 +47,31 @@ const ibmPlexMonoMedium = localFont({
 export const metadata: Metadata = {
   title: "Lakshya | AI & Automation Engineer",
   description:
-    "AI & Automation Engineer building intelligent platforms and automation systems.",
+    "AI & Automation Engineer building intelligent platforms and automation systems that turn repetitive work into software that gets things done.",
+  metadataBase: new URL("https://lakshya.dev"),
+  openGraph: {
+    title: "Lakshya | AI & Automation Engineer",
+    description:
+      "AI & Automation Engineer building intelligent platforms and automation systems.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lakshya | AI & Automation Engineer",
+    description:
+      "AI & Automation Engineer building intelligent platforms and automation systems.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#050505",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
