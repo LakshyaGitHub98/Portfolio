@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Hero from "@/sections/Hero";
+
+const Hud = dynamic(() => import("@/components/Hud"), { ssr: false });
 import About from "@/sections/About";
 import Engineering from "@/sections/Engineering";
 import Stack from "@/sections/Stack";
@@ -20,6 +23,7 @@ export default function Home() {
         <Experience />
         <Contact />
       </main>
+      <Hud />
     </>
   );
 }
