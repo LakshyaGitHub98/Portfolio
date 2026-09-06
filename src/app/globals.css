@@ -11,11 +11,17 @@
   --bone: #EDEDEF;
   --copper: #BF5B2E;
   --ember: #E8541D;
+
+  /* Font families */
+  --font-display: var(--font-display), system-ui, sans-serif;
+  --font-body: var(--font-body), system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
 }
 
 body {
   color: var(--bone);
   background: var(--void);
+  font-family: var(--font-body);
 }
 
 @layer utilities {
