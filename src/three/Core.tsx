@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import type { Group } from "three";
@@ -15,6 +15,7 @@ export default function Core({ particleCount = 750 }: CoreProps) {
   const ring2Ref = useRef<Group>(null);
   const ring3Ref = useRef<Group>(null);
   const particlesRef = useRef<Group>(null);
+  const mouse = useRef({ x: 0, y: 0 });
 
   const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
@@ -36,9 +37,22 @@ export default function Core({ particleCount = 750 }: CoreProps) {
     return { positions: pos, colors: col };
   }, [particleCount]);
 
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = (e.clientY / window.innerHeight) * 2 - 1;
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
   useFrame(({ clock }) => {
     if (groupRef.current) {
       groupRef.current.rotation.y += 0.002;
+      const targetX = mouse.current.y * -0.08;
+      const targetZ = mouse.current.x * 0.08;
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, 0.05);
+      groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetZ, 0.05);
       const s = 1 + Math.sin(clock.elapsedTime * 0.5) * 0.02;
       groupRef.current.scale.set(s, s, s);
     }
