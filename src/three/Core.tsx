@@ -16,6 +16,10 @@ export default function Core({ particleCount = 750 }: CoreProps) {
   const ring3Ref = useRef<Group>(null);
   const particlesRef = useRef<Group>(null);
   const mouse = useRef({ x: 0, y: 0 });
+  const isDragging = useRef(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+  const dragOffset = useRef({ x: 0, y: 0 });
+  const targetDrag = useRef({ x: 0, y: 0 });
 
   const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
@@ -41,18 +45,46 @@ export default function Core({ particleCount = 750 }: CoreProps) {
     const onMove = (e: MouseEvent) => {
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.current.y = (e.clientY / window.innerHeight) * 2 - 1;
+      if (isDragging.current) {
+        const dx = e.clientX - dragStart.current.x;
+        const dy = e.clientY - dragStart.current.y;
+        targetDrag.current.y = dx * 0.008;
+        targetDrag.current.x = dy * 0.008;
+      }
+    };
+    const onUp = () => {
+      isDragging.current = false;
+      targetDrag.current.x = 0;
+      targetDrag.current.y = 0;
     };
     window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("mouseup", onUp);
+    };
   }, []);
 
+  const handlePointerDown = (e: { clientX: number; clientY: number }) => {
+    isDragging.current = true;
+    dragStart.current.x = e.clientX;
+    dragStart.current.y = e.clientY;
+  };
+
   useFrame(({ clock }) => {
+    dragOffset.current.x = THREE.MathUtils.lerp(dragOffset.current.x, targetDrag.current.x, isDragging.current ? 0.12 : 0.03);
+    dragOffset.current.y = THREE.MathUtils.lerp(dragOffset.current.y, targetDrag.current.y, isDragging.current ? 0.12 : 0.03);
     if (groupRef.current) {
-      groupRef.current.rotation.y += 0.002;
-      const targetX = mouse.current.y * -0.08;
-      const targetZ = mouse.current.x * 0.08;
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, 0.05);
-      groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetZ, 0.05);
+      if (!isDragging.current) groupRef.current.rotation.y += 0.002;
+      else groupRef.current.rotation.y += dragOffset.current.y * 0.02;
+      const parallaxX = mouse.current.y * -0.08;
+      const parallaxZ = mouse.current.x * 0.08;
+      const targetX = parallaxX + dragOffset.current.x;
+      const targetZ = parallaxZ + dragOffset.current.y;
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, isDragging.current ? 0.12 : 0.05);
+      groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetZ, isDragging.current ? 0.12 : 0.05);
       const s = 1 + Math.sin(clock.elapsedTime * 0.5) * 0.02;
       groupRef.current.scale.set(s, s, s);
     }
@@ -63,7 +95,18 @@ export default function Core({ particleCount = 750 }: CoreProps) {
   });
 
   return (
-    <group ref={groupRef}>
+    <group
+      ref={groupRef}
+      onPointerDown={(e) => {
+        (e.target as unknown as { setPointerCapture?: (id: number) => void })?.setPointerCapture?.(e.pointerId);
+        handlePointerDown({ clientX: e.clientX, clientY: e.clientY });
+      }}
+      onPointerUp={() => {
+        isDragging.current = false;
+        targetDrag.current.x = 0;
+        targetDrag.current.y = 0;
+      }}
+    >
       <mesh>
         <icosahedronGeometry args={[1.1, 1]} />
         <meshStandardMaterial
