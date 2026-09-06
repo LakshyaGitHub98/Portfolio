@@ -51,9 +51,14 @@ function ModuleMesh({ geom, color }: { geom: string; color: string }) {
 export default function Modules({ scrollProgress }: Props) {
   const groupRef = useRef<Group>(null);
   const modRefs = [useRef<Group>(null), useRef<Group>(null), useRef<Group>(null), useRef<Group>(null)];
+  const reducedMotion = useRef(false);
 
-  useFrame(() => {
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (typeof window !== "undefined") {
+    reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  useFrame(({ clock }) => {
+    if (reducedMotion.current) return;
     const p = scrollProgress;
     let t = 0;
     if (p < 0.25) t = 0;
@@ -73,7 +78,7 @@ export default function Modules({ scrollProgress }: Props) {
       const delay = i * 0.08;
       const local = THREE.MathUtils.clamp((t - delay) / (1 - delay), 0, 1);
       const s = THREE.MathUtils.smootherstep(local, 0, 1);
-      const angle = Date.now() * 0.0003 * (i % 2 === 0 ? 1 : -1) * (0.6 + i * 0.2);
+      const angle = clock.elapsedTime * 0.3 * (i % 2 === 0 ? 1 : -1) * (0.6 + i * 0.2);
       const radius = MODULES[i].radius * s;
       r.current.position.x = Math.cos(angle) * radius;
       r.current.position.z = Math.sin(angle) * radius;
