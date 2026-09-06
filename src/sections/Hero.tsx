@@ -1,4 +1,7 @@
+import dynamic from "next/dynamic";
 import Button from "@/components/Button";
+
+const Scene = dynamic(() => import("@/three/Scene"), { ssr: false });
 
 export default function Hero() {
   return (
@@ -28,13 +31,8 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* 3D Core placeholder — Phase 3 will fill this */}
-        <div className="hidden lg:flex items-center justify-center">
-          <div className="w-72 h-72 rounded-full border border-steel/30 flex items-center justify-center">
-            <span className="text-fog/30 text-xs font-mono">
-              [3D CORE]
-            </span>
-          </div>
+        <div className="hidden lg:flex items-center justify-center" aria-hidden="true">
+          <Scene />
         </div>
       </div>
     </section>
