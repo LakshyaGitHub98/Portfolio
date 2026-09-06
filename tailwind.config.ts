@@ -18,6 +18,18 @@ const config: Config = {
         copper: "var(--copper)",
         ember: "var(--ember)",
       },
+      fontFamily: {
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
+        body: ["var(--font-body)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
+      fontSize: {
+        hero: "var(--type-hero)",
+        h2: "var(--type-h2)",
+        h3: "var(--type-h3)",
+        body: "var(--type-body)",
+        mono: "var(--type-mono)",
+      },
     },
   },
   plugins: [],
