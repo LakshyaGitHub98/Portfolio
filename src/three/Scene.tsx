@@ -9,11 +9,16 @@ import Lights from "./Lights";
 import Modules from "./Modules";
 
 function CameraRig({ progress }: { progress: number }) {
-  const { camera } = useThree();
+  const { camera, invalidate } = useThree();
   const targetZ = useRef(5);
+  const reducedMotion = useRef(false);
+
+  if (typeof window !== "undefined") {
+    reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
 
   useFrame(() => {
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (reducedMotion.current) {
       camera.position.set(0, 0, 5);
       camera.lookAt(0, 0, 0);
       return;
@@ -29,6 +34,7 @@ function CameraRig({ progress }: { progress: number }) {
     camera.position.z = targetZ.current;
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, y, 0.06);
     camera.lookAt(0, 0, 0);
+    invalidate();
   });
   return null;
 }
@@ -45,7 +51,7 @@ export default function Scene({ scrollProgress = 0 }: Props) {
         camera={{ position: [0, 0, 5], fov: 45, near: 0.1, far: 50 }}
         gl={{ antialias: true, alpha: false }}
         style={{ background: "#050505" }}
-        frameloop="always"
+        frameloop="demand"
       >
         <CameraRig progress={scrollProgress} />
         <Lights />
