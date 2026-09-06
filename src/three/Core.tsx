@@ -7,9 +7,10 @@ import type { Group } from "three";
 
 type CoreProps = {
   particleCount?: number;
+  scrollProgress?: number;
 };
 
-export default function Core({ particleCount = 750 }: CoreProps) {
+export default function Core({ particleCount = 750, scrollProgress = 0 }: CoreProps) {
   const groupRef = useRef<Group>(null);
   const ring1Ref = useRef<Group>(null);
   const ring2Ref = useRef<Group>(null);
@@ -85,7 +86,8 @@ export default function Core({ particleCount = 750 }: CoreProps) {
       const targetZ = parallaxZ + dragOffset.current.y;
       groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, isDragging.current ? 0.12 : 0.05);
       groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetZ, isDragging.current ? 0.12 : 0.05);
-      const s = 1 + Math.sin(clock.elapsedTime * 0.5) * 0.02;
+      const approachScale = scrollProgress < 0.18 ? 1 + scrollProgress * 0.6 : scrollProgress < 0.45 ? 1.11 : 1.11 - (scrollProgress - 0.45) * 0.3;
+      const s = (1 + Math.sin(clock.elapsedTime * 0.5) * 0.02) * approachScale;
       groupRef.current.scale.set(s, s, s);
     }
     if (ring1Ref.current) ring1Ref.current.rotation.y += 0.001;
