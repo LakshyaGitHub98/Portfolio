@@ -7,7 +7,7 @@ export default function Hero() {
       className="min-h-screen flex items-center pt-16"
     >
       <div className="max-w-6xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Text block — left-aligned */}
+        {/* Text block left aligned */}
         <div className="flex flex-col gap-6">
           <h1 className="text-balance">
             I don&apos;t just write code.
