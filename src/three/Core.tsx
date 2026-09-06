@@ -86,9 +86,13 @@ export default function Core({ particleCount = 750, scrollProgress = 0 }: CorePr
       const targetZ = parallaxZ + dragOffset.current.y;
       groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, isDragging.current ? 0.12 : 0.05);
       groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetZ, isDragging.current ? 0.12 : 0.05);
+      const isSplit = scrollProgress >= 0.25 && scrollProgress < 0.55;
       const approachScale = scrollProgress < 0.18 ? 1 + scrollProgress * 0.6 : scrollProgress < 0.45 ? 1.11 : 1.11 - (scrollProgress - 0.45) * 0.3;
-      const s = (1 + Math.sin(clock.elapsedTime * 0.5) * 0.02) * approachScale;
+      const s = (1 + Math.sin(clock.elapsedTime * 0.5) * 0.02) * approachScale * (isSplit ? 0.32 : 1);
       groupRef.current.scale.set(s, s, s);
+      [ring1Ref, ring2Ref, ring3Ref, particlesRef].forEach((r) => {
+        if (r.current) r.current.visible = !isSplit;
+      });
     }
     if (ring1Ref.current) ring1Ref.current.rotation.y += 0.001;
     if (ring2Ref.current) ring2Ref.current.rotation.y -= 0.0008;

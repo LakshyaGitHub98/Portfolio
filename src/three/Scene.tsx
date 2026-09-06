@@ -6,6 +6,7 @@ import * as THREE from "three";
 import BackgroundParticles from "./BackgroundParticles";
 import Core from "./Core";
 import Lights from "./Lights";
+import Modules from "./Modules";
 
 function CameraRig({ progress }: { progress: number }) {
   const { camera } = useThree();
@@ -50,6 +51,7 @@ export default function Scene({ scrollProgress = 0 }: Props) {
         <Lights />
         <BackgroundParticles />
         <Core scrollProgress={scrollProgress} />
+        <Modules scrollProgress={scrollProgress} />
       </Canvas>
     </div>
   );
