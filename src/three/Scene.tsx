@@ -1,6 +1,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
+import BackgroundParticles from "./BackgroundParticles";
 import Core from "./Core";
 import Lights from "./Lights";
 
@@ -14,6 +15,7 @@ export default function Scene() {
         style={{ background: "#050505" }}
       >
         <Lights />
+        <BackgroundParticles />
         <Core />
       </Canvas>
     </div>
