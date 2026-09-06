@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/Button";
+import CallButton from "@/components/CallButton";
 
 export default function Contact() {
   return (
@@ -69,7 +70,7 @@ export default function Contact() {
         </form>
 
         <div className="mt-10">
-          <Button href="tel:+919839953414" variant="secondary">Call me</Button>
+          <CallButton />
         </div>
 
         <p className="mt-16 font-mono text-sm text-fog">
