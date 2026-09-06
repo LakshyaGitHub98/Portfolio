@@ -20,11 +20,11 @@ export default function Projects() {
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                 <div className="flex-1">
                   <h3 className="text-bone">
-                    {project.name} <span className="text-fog font-normal text-base">&mdash; {project.category}</span>
+                    {project.name} <span className="text-fog font-normal text-base">· {project.category}</span>
                   </h3>
                   <p className="mt-1 text-fog text-sm">{project.tagline}</p>
                 </div>
-                <span className="text-xs font-mono tracking-wide text-fog/40 border border-steel rounded px-2 py-1 select-none">GitHub — soon</span>
+                <span className="text-xs font-mono tracking-wide text-fog/40 border border-steel rounded px-2 py-1 select-none">GitHub · soon</span>
               </div>
 
               <p className="mt-4 text-fog leading-relaxed text-sm">{project.description}</p>
