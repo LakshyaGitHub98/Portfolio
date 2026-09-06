@@ -1,5 +1,6 @@
 "use client";
 
+import { Text } from "@react-three/drei";
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
@@ -90,6 +91,17 @@ export default function Modules({ scrollProgress }: Props) {
       {MODULES.map((m, i) => (
         <group key={m.label} ref={modRefs[i]} rotation={[m.tilt, 0, 0]}>
           <ModuleMesh geom={m.geom} color={m.color} />
+          <Text
+            position={[0, 0.62, 0]}
+            fontSize={0.13}
+            color={m.color}
+            anchorX="center"
+            anchorY="middle"
+            outlineWidth={0.008}
+            outlineColor="#050505"
+          >
+            {m.label}
+          </Text>
         </group>
       ))}
     </group>
