@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export default function About() {
   return (
     <section id="about" className="py-24 md:py-32">
@@ -14,13 +12,10 @@ export default function About() {
           </p>
           <div className="flex justify-center md:justify-end">
             <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-full border-2 border-copper overflow-hidden bg-panel">
-              <Image
-                src="/profile.png"
+              <img
+                src="/Portfolio/profile.png"
                 alt="Lakshya"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 224px, 288px"
-                priority={false}
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
