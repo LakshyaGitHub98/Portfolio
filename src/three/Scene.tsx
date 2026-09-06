@@ -3,6 +3,7 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
+import { useViewportSize } from "@/hooks/useViewportSize";
 import BackgroundParticles from "./BackgroundParticles";
 import Core from "./Core";
 import Lights from "./Lights";
@@ -44,10 +45,11 @@ type Props = {
 };
 
 export default function Scene({ scrollProgress = 0 }: Props) {
+  const { particleCount, bgParticleCount, dpr } = useViewportSize();
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none">
       <Canvas
-        dpr={[1, 2]}
+        dpr={dpr}
         camera={{ position: [0, 0, 5], fov: 45, near: 0.1, far: 50 }}
         gl={{ antialias: true, alpha: false }}
         style={{ background: "#050505" }}
@@ -55,8 +57,8 @@ export default function Scene({ scrollProgress = 0 }: Props) {
       >
         <CameraRig progress={scrollProgress} />
         <Lights />
-        <BackgroundParticles />
-        <Core scrollProgress={scrollProgress} />
+        <BackgroundParticles count={bgParticleCount} />
+        <Core scrollProgress={scrollProgress} particleCount={particleCount} />
         <Modules scrollProgress={scrollProgress} />
       </Canvas>
     </div>
