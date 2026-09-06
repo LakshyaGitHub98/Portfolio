@@ -10,7 +10,7 @@ type CoreProps = {
   scrollProgress?: number;
 };
 
-export default function Core({ particleCount = 750, scrollProgress = 0 }: CoreProps) {
+export default function Core({ particleCount = 900, scrollProgress = 0 }: CoreProps) {
   const groupRef = useRef<Group>(null);
   const ring1Ref = useRef<Group>(null);
   const ring2Ref = useRef<Group>(null);
@@ -43,7 +43,7 @@ export default function Core({ particleCount = 750, scrollProgress = 0 }: CorePr
   }, [particleCount]);
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
+    const onMove = (e: PointerEvent) => {
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.current.y = (e.clientY / window.innerHeight) * 2 - 1;
       if (isDragging.current) {
@@ -58,13 +58,11 @@ export default function Core({ particleCount = 750, scrollProgress = 0 }: CorePr
       targetDrag.current.x = 0;
       targetDrag.current.y = 0;
     };
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
-    window.addEventListener("mouseup", onUp);
     return () => {
-      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("mouseup", onUp);
     };
   }, []);
 
