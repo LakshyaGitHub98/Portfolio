@@ -2,25 +2,25 @@ const capabilities = [
   {
     title: "AI & Automation",
     description:
-      "LLMs, agents, tool-calling, RAG pipelines, and workflow automation — turning complex AI primitives into systems that run themselves.",
+      "LLMs, agents, tool-calling, RAG pipelines, and workflow automation, turning complex AI primitives into systems that run themselves.",
     width: "max-w-sm",
   },
   {
     title: "Backend",
     description:
-      "Python, FastAPI, Node.js, Express, REST APIs, auth — building the infrastructure that intelligent platforms run on.",
+      "Python, FastAPI, Node.js, Express, REST APIs, auth, building the infrastructure that intelligent platforms run on.",
     width: "max-w-xs",
   },
   {
     title: "Frontend",
     description:
-      "React, Next.js, TypeScript, Tailwind — clean interfaces that make complex systems feel simple.",
+      "React, Next.js, TypeScript, Tailwind, clean interfaces that make complex systems feel simple.",
     width: "max-w-sm",
   },
   {
     title: "Systems",
     description:
-      "Architecture, data flow, OS fundamentals, networking — understanding what's happening beneath the interface.",
+      "Architecture, data flow, OS fundamentals, networking, understanding what's happening beneath the interface.",
     width: "max-w-xs",
   },
 ];
