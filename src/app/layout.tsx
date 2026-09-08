@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -85,6 +86,12 @@ export default function RootLayout({
         className={`${inter.variable} ${ibmPlexSans.variable} ${ibmPlexSansMedium.variable} ${ibmPlexSansSemiBold.variable} ${ibmPlexMono.variable} ${ibmPlexMonoMedium.variable} antialiased`}
       >
         {children}
+        <Script
+          defer
+          data-domain="lakshya.dev"
+          src="https://plausible.io/js/script.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
