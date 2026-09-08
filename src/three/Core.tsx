@@ -16,12 +16,15 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
   const ring2Ref = useRef<Group>(null);
   const ring3Ref = useRef<Group>(null);
   const particlesRef = useRef<Group>(null);
+  const reticleRef = useRef<Group>(null);
   const { invalidate } = useThree();
   const mouse = useRef({ x: 0, y: 0 });
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const dragOffset = useRef({ x: 0, y: 0 });
   const targetDrag = useRef({ x: 0, y: 0 });
+  const lockOn = useRef(false);
+  const lockOnIntensity = useRef(0);
 
   const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
@@ -122,11 +125,37 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
     [coreMaterial, wireframeMaterial, ring1Material, ring2Material, ring3Material, particleMaterial],
   );
 
+  const reticleMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#E8541D",
+        wireframe: true,
+        transparent: true,
+        opacity: 0,
+        emissive: "#E8541D",
+        emissiveIntensity: 0.3,
+      }),
+    [],
+  );
+
   useEffect(() => {
     return () => {
       allMaterials.forEach((m) => m.dispose());
+      reticleMaterial.dispose();
     };
-  }, [allMaterials]);
+  }, [allMaterials, reticleMaterial]);
+
+  // Lock-on events from Contact CTA hover
+  useEffect(() => {
+    const onLockOn = () => { lockOn.current = true; invalidate(); };
+    const onLockOff = () => { lockOn.current = false; invalidate(); };
+    window.addEventListener("core-lock-on", onLockOn);
+    window.addEventListener("core-lock-off", onLockOff);
+    return () => {
+      window.removeEventListener("core-lock-on", onLockOn);
+      window.removeEventListener("core-lock-off", onLockOff);
+    };
+  }, [invalidate]);
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
@@ -185,7 +214,22 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
     if (ring2Ref.current) ring2Ref.current.rotation.y -= 0.0008;
     if (ring3Ref.current) ring3Ref.current.rotation.y += 0.0012;
     if (particlesRef.current) particlesRef.current.rotation.y += 0.0004;
-    if (wasDragging || Math.abs(dragOffset.current.x) > 0.001 || Math.abs(dragOffset.current.y) > 0.001) {
+
+    // CTA lock-on animation: ring3 speeds up, reticle fades in
+    const targetIntensity = lockOn.current ? 1 : 0;
+    lockOnIntensity.current = THREE.MathUtils.lerp(lockOnIntensity.current, targetIntensity, 0.06);
+    ring3Material.emissiveIntensity = 0.05 + lockOnIntensity.current * 0.4;
+    if (ring3Ref.current) {
+      ring3Ref.current.rotation.y += lockOnIntensity.current * 0.015;
+    }
+    reticleMaterial.opacity = lockOnIntensity.current * 0.35;
+    if (reticleRef.current) {
+      reticleRef.current.visible = lockOnIntensity.current > 0.01;
+      reticleRef.current.rotation.y = clock.elapsedTime * 0.8;
+      reticleRef.current.rotation.z = clock.elapsedTime * 0.3;
+    }
+
+    if (wasDragging || Math.abs(dragOffset.current.x) > 0.001 || Math.abs(dragOffset.current.y) > 0.001 || Math.abs(lockOnIntensity.current - targetIntensity) > 0.01) {
       invalidate();
     }
   });
@@ -222,6 +266,11 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
       <group ref={ring3Ref} rotation={[Math.PI / 2 - 0.175, 0, 0]}>
         <mesh material={ring3Material}>
           <torusGeometry args={[2.0, 0.008, 16, 120]} />
+        </mesh>
+      </group>
+      <group ref={reticleRef} rotation={[Math.PI / 2, 0, 0]} visible={false}>
+        <mesh material={reticleMaterial}>
+          <torusGeometry args={[2.3, 0.004, 8, 60]} />
         </mesh>
       </group>
       <group ref={particlesRef}>

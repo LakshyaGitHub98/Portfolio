@@ -20,8 +20,16 @@ export default function SystemLog() {
         logEvent("core released");
       }
     };
+    const onLockOn = () => logEvent("CTA lock-on engaged");
+    const onLockOff = () => logEvent("CTA lock-on disengaged");
     window.addEventListener("core-drag", onDrag);
-    return () => window.removeEventListener("core-drag", onDrag);
+    window.addEventListener("core-lock-on", onLockOn);
+    window.addEventListener("core-lock-off", onLockOff);
+    return () => {
+      window.removeEventListener("core-drag", onDrag);
+      window.removeEventListener("core-lock-on", onLockOn);
+      window.removeEventListener("core-lock-off", onLockOff);
+    };
   }, [logEvent]);
 
   useEffect(() => {
