@@ -2,17 +2,24 @@
 
 import { useState } from "react";
 import type { Project } from "@/data/projects";
+import { useSystemLog } from "@/hooks/useSystemLog";
 
 const TABS = ["Problem", "Approach", "Result", "Stack"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function CaseStudyTabs({ project }: { project: Project }) {
   const [active, setActive] = useState<Tab>("Problem");
+  const { logEvent } = useSystemLog();
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     const idx = TABS.indexOf(active);
     if (e.key === "ArrowRight") setActive(TABS[(idx + 1) % TABS.length]);
     if (e.key === "ArrowLeft") setActive(TABS[(idx - 1 + TABS.length) % TABS.length]);
+  };
+
+  const handleTabChange = (tab: Tab) => {
+    setActive(tab);
+    logEvent(`case study: ${project.name} — ${tab}`);
   };
 
   return (
@@ -23,7 +30,7 @@ export default function CaseStudyTabs({ project }: { project: Project }) {
             key={tab}
             role="tab"
             aria-selected={active === tab}
-            onClick={() => setActive(tab)}
+            onClick={() => handleTabChange(tab)}
             className={`px-3 py-2 text-xs font-mono tracking-wide border-b-2 -mb-px transition-colors ${active === tab ? "border-copper text-copper" : "border-transparent text-fog hover:text-bone"}`}
           >
             {tab}

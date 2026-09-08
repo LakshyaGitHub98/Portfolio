@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { skillCategories } from "@/data/skills";
+import { useSystemLog } from "@/hooks/useSystemLog";
 
 const DESCRIPTIONS: Record<string, string> = {
   Python: "Primary language for ML pipelines and backend services.",
@@ -48,6 +49,7 @@ const DESCRIPTIONS: Record<string, string> = {
 
 export default function ArchitectureDiagram() {
   const [active, setActive] = useState<string | null>(null);
+  const { logEvent } = useSystemLog();
 
   return (
     <div className="mt-10 space-y-8">
@@ -58,7 +60,11 @@ export default function ArchitectureDiagram() {
             {cat.skills.map((skill) => (
               <button
                 key={`${cat.name}-${skill}`}
-                onClick={() => setActive((v) => (v === skill ? null : skill))}
+                onClick={() => {
+                  const next = active === skill ? null : skill;
+                  setActive(next);
+                  if (next) logEvent(`stack node inspected: ${next}`);
+                }}
                 className={`px-3 py-1 text-sm border rounded bg-panel transition-colors ${active === skill ? "border-copper text-copper" : "border-steel text-fog hover:border-copper hover:text-copper"}`}
                 aria-pressed={active === skill}
               >

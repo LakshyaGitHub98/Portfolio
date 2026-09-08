@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSystemLog } from "@/hooks/useSystemLog";
 
 const SECTIONS = ["hero", "about", "engineering", "stack", "projects", "experience", "contact"] as const;
 
@@ -8,6 +9,7 @@ export default function CommandBar() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const { logEvent } = useSystemLog();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -34,6 +36,7 @@ export default function CommandBar() {
 
   const jump = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    logEvent(`command executed: /${id}`);
     setOpen(false);
     setQuery("");
   };

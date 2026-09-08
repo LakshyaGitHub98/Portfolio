@@ -143,6 +143,7 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
       isDragging.current = false;
       targetDrag.current.x = 0;
       targetDrag.current.y = 0;
+      window.dispatchEvent(new CustomEvent("core-drag", { detail: { dragging: false } }));
     };
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
@@ -156,6 +157,7 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
     isDragging.current = true;
     dragStart.current.x = e.clientX;
     dragStart.current.y = e.clientY;
+    window.dispatchEvent(new CustomEvent("core-drag", { detail: { dragging: true } }));
   };
 
   useFrame(({ clock }) => {

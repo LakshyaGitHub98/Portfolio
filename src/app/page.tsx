@@ -11,10 +11,12 @@ import SceneWrapper from "@/components/SceneWrapper";
 import ScrollAnimations from "@/components/ScrollAnimations";
 import HudWrapper from "@/components/HudWrapper";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import SystemLog from "@/components/SystemLog";
+import { SystemLogProvider } from "@/hooks/useSystemLog";
 
 export default function Home() {
   return (
-    <>
+    <SystemLogProvider>
       <ErrorBoundary>
         <SceneWrapper />
       </ErrorBoundary>
@@ -30,7 +32,8 @@ export default function Home() {
       </main>
       <HudWrapper />
       <CommandBar />
+      <SystemLog />
       <ScrollAnimations />
-    </>
+    </SystemLogProvider>
   );
 }
