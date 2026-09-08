@@ -10,11 +10,14 @@ import CommandBar from "@/components/CommandBar";
 import SceneWrapper from "@/components/SceneWrapper";
 import ScrollAnimations from "@/components/ScrollAnimations";
 import HudWrapper from "@/components/HudWrapper";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function Home() {
   return (
     <>
-      <SceneWrapper />
+      <ErrorBoundary>
+        <SceneWrapper />
+      </ErrorBoundary>
       <Navbar />
       <main className="relative z-10">
         <Hero />
