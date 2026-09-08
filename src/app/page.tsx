@@ -13,6 +13,7 @@ import HudWrapper from "@/components/HudWrapper";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SystemLog from "@/components/SystemLog";
 import DeepLinkEffect from "@/components/DeepLinkEffect";
+import HoverReticle from "@/components/HoverReticle";
 import { SystemLogProvider } from "@/hooks/useSystemLog";
 
 export default function Home() {
@@ -35,6 +36,7 @@ export default function Home() {
       <HudWrapper />
       <CommandBar />
       <SystemLog />
+      <HoverReticle />
       <ScrollAnimations />
     </SystemLogProvider>
   );
