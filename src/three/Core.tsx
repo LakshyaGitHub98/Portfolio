@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import type { Group } from "three";
+import type { Group, Material } from "three";
 
 type CoreProps = {
   particleCount?: number;
@@ -42,6 +42,91 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
     }
     return { positions: pos, colors: col };
   }, [particleCount]);
+
+  const coreMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#BF5B2E",
+        emissive: "#BF5B2E",
+        emissiveIntensity: 0.15,
+        roughness: 0.32,
+        metalness: 0.78,
+      }),
+    [],
+  );
+
+  const wireframeMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#E8541D",
+        wireframe: true,
+        transparent: true,
+        opacity: 0.14,
+        emissive: "#E8541D",
+        emissiveIntensity: 0.1,
+      }),
+    [],
+  );
+
+  const ring1Material = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#BF5B2E",
+        emissive: "#BF5B2E",
+        emissiveIntensity: 0.08,
+        transparent: true,
+        opacity: 0.9,
+      }),
+    [],
+  );
+
+  const ring2Material = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#BF5B2E",
+        emissive: "#BF5B2E",
+        emissiveIntensity: 0.06,
+        transparent: true,
+        opacity: 0.7,
+      }),
+    [],
+  );
+
+  const ring3Material = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#BF5B2E",
+        emissive: "#BF5B2E",
+        emissiveIntensity: 0.05,
+        transparent: true,
+        opacity: 0.55,
+      }),
+    [],
+  );
+
+  const particleMaterial = useMemo(
+    () =>
+      new THREE.PointsMaterial({
+        size: 0.02,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.55,
+        sizeAttenuation: true,
+        depthWrite: false,
+      }),
+    [],
+  );
+
+  const allMaterials = useMemo<Material[]>(
+    () => [coreMaterial, wireframeMaterial, ring1Material, ring2Material, ring3Material, particleMaterial],
+    [coreMaterial, wireframeMaterial, ring1Material, ring2Material, ring3Material, particleMaterial],
+  );
+
+  useEffect(() => {
+    return () => {
+      allMaterials.forEach((m) => m.dispose());
+    };
+  }, [allMaterials]);
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
@@ -116,52 +201,33 @@ export default function Core({ particleCount = 900, scrollProgress = 0 }: CorePr
         targetDrag.current.y = 0;
       }}
     >
-      <mesh>
+      <mesh material={coreMaterial}>
         <icosahedronGeometry args={[1.1, 1]} />
-        <meshStandardMaterial
-          color="#BF5B2E"
-          emissive="#BF5B2E"
-          emissiveIntensity={0.15}
-          roughness={0.32}
-          metalness={0.78}
-        />
       </mesh>
-      <mesh>
+      <mesh material={wireframeMaterial}>
         <icosahedronGeometry args={[1.115, 1]} />
-        <meshStandardMaterial
-          color="#E8541D"
-          wireframe
-          transparent
-          opacity={0.14}
-          emissive="#E8541D"
-          emissiveIntensity={0.1}
-        />
       </mesh>
       <group ref={ring1Ref} rotation={[Math.PI / 2, 0, 0]}>
-        <mesh>
+        <mesh material={ring1Material}>
           <torusGeometry args={[1.4, 0.008, 16, 120]} />
-          <meshStandardMaterial color="#BF5B2E" emissive="#BF5B2E" emissiveIntensity={0.08} transparent opacity={0.9} />
         </mesh>
       </group>
       <group ref={ring2Ref} rotation={[Math.PI / 2 + 0.26, 0, 0]}>
-        <mesh>
+        <mesh material={ring2Material}>
           <torusGeometry args={[1.7, 0.008, 16, 120]} />
-          <meshStandardMaterial color="#BF5B2E" emissive="#BF5B2E" emissiveIntensity={0.06} transparent opacity={0.7} />
         </mesh>
       </group>
       <group ref={ring3Ref} rotation={[Math.PI / 2 - 0.175, 0, 0]}>
-        <mesh>
+        <mesh material={ring3Material}>
           <torusGeometry args={[2.0, 0.008, 16, 120]} />
-          <meshStandardMaterial color="#BF5B2E" emissive="#BF5B2E" emissiveIntensity={0.05} transparent opacity={0.55} />
         </mesh>
       </group>
       <group ref={particlesRef}>
-        <points>
+        <points material={particleMaterial}>
           <bufferGeometry>
             <bufferAttribute attach="attributes-position" args={[positions, 3]} />
             <bufferAttribute attach="attributes-color" args={[colors, 3]} />
           </bufferGeometry>
-          <pointsMaterial size={0.02} vertexColors transparent opacity={0.55} sizeAttenuation depthWrite={false} />
         </points>
       </group>
     </group>

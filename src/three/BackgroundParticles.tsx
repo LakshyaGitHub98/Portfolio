@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import type { Group } from "three";
@@ -33,19 +33,37 @@ export default function BackgroundParticles({ count = 120 }: Props) {
     return { positions: pos, colors: col };
   }, [count]);
 
+  const particleMaterial = useMemo(
+    () =>
+      new THREE.PointsMaterial({
+        size: 0.018,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.28,
+        sizeAttenuation: true,
+        depthWrite: false,
+      }),
+    [],
+  );
+
+  useEffect(() => {
+    return () => {
+      particleMaterial.dispose();
+    };
+  }, [particleMaterial]);
+
   useFrame(() => {
     if (groupRef.current) groupRef.current.rotation.y += 0.0002;
   });
 
   return (
     <group ref={groupRef}>
-      <points>
+        <points material={particleMaterial}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
           <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-        </bufferGeometry>
-        <pointsMaterial size={0.018} vertexColors transparent opacity={0.28} sizeAttenuation depthWrite={false} />
-      </points>
+          </bufferGeometry>
+        </points>
     </group>
   );
 }

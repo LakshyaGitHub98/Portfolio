@@ -1,7 +1,7 @@
 "use client";
 
 import { Html } from "@react-three/drei";
-import { useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
 import * as THREE from "three";
@@ -19,31 +19,46 @@ const MODULES = [
 
 function ModuleMesh({ geom, color }: { geom: string; color: string }) {
   const dim = color === "#EDEDEF" ? 0.35 : color === "#9195A0" ? 0.35 : 1;
+
+  const material = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color,
+        emissive: color,
+        emissiveIntensity: geom === "tetra" ? 0.08 * dim : 0.12,
+        roughness: geom === "dodeca" ? 0.5 : 0.4,
+        metalness: geom === "dodeca" ? 0.5 : 0.6,
+      }),
+    [color, geom, dim],
+  );
+
+  useEffect(() => {
+    return () => {
+      material.dispose();
+    };
+  }, [material]);
+
   if (geom === "octahedron")
     return (
-      <mesh>
+      <mesh material={material}>
         <octahedronGeometry args={[0.35, 0]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.12} roughness={0.4} metalness={0.6} />
       </mesh>
     );
   if (geom === "box")
     return (
-      <mesh>
+      <mesh material={material}>
         <boxGeometry args={[0.5, 0.5, 0.5]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.12} roughness={0.4} metalness={0.6} />
       </mesh>
     );
   if (geom === "tetra")
     return (
-      <mesh>
+      <mesh material={material}>
         <tetrahedronGeometry args={[0.38, 0]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.08 * dim} roughness={0.4} metalness={0.5} />
       </mesh>
     );
   return (
-    <mesh>
+    <mesh material={material}>
       <dodecahedronGeometry args={[0.32, 0]} />
-      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.08} roughness={0.5} metalness={0.5} />
     </mesh>
   );
 }
