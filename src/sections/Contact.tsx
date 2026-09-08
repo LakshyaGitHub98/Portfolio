@@ -1,5 +1,6 @@
 import CallButton from "@/components/CallButton";
 import ContactForm from "@/components/ContactForm";
+import ResumeExport from "@/components/ResumeExport";
 
 export default function Contact() {
   return (
@@ -17,6 +18,8 @@ export default function Contact() {
         <div className="mt-10">
           <CallButton />
         </div>
+
+        <ResumeExport />
 
         <p className="mt-16 font-mono text-sm text-fog">
           Build. Automate. Iterate.
