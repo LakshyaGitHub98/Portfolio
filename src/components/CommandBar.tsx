@@ -36,6 +36,7 @@ export default function CommandBar() {
 
   const jump = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", `#${id}`);
     logEvent(`command executed: /${id}`);
     setOpen(false);
     setQuery("");

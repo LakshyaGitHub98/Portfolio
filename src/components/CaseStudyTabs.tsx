@@ -1,15 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Project } from "@/data/projects";
 import { useSystemLog } from "@/hooks/useSystemLog";
 
 const TABS = ["Problem", "Approach", "Result", "Stack"] as const;
 type Tab = (typeof TABS)[number];
 
-export default function CaseStudyTabs({ project }: { project: Project }) {
+function isValidTab(t: string): t is Tab {
+  return (TABS as readonly string[]).includes(t);
+}
+
+export default function CaseStudyTabs({ project, slug }: { project: Project; slug: string }) {
   const [active, setActive] = useState<Tab>("Problem");
   const { logEvent } = useSystemLog();
+
+  // Listen for deep-link events to open a specific tab
+  useEffect(() => {
+    const onDeepLink = (e: Event) => {
+      const { slug: linkSlug, tab } = (e as CustomEvent).detail as { slug: string; tab: string };
+      if (linkSlug === slug && isValidTab(tab)) {
+        setActive(tab);
+      }
+    };
+    window.addEventListener("deep-link-tab", onDeepLink);
+    return () => window.removeEventListener("deep-link-tab", onDeepLink);
+  }, [slug]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     const idx = TABS.indexOf(active);
@@ -20,6 +36,8 @@ export default function CaseStudyTabs({ project }: { project: Project }) {
   const handleTabChange = (tab: Tab) => {
     setActive(tab);
     logEvent(`case study: ${project.name} — ${tab}`);
+    // Update URL hash for deep-linking
+    window.history.replaceState(null, "", `#projects/${slug}/${tab.toLowerCase()}`);
   };
 
   return (

@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { projects } from "@/data/projects";
+import { projectSlug } from "@/lib/utils";
 
 const CaseStudyTabs = dynamic(() => import("@/components/CaseStudyTabs"), {
   loading: () => <div className="mt-5 h-24 animate-pulse rounded bg-steel/20" />,
@@ -29,7 +30,7 @@ export default function Projects() {
 
               <p className="mt-4 text-fog leading-relaxed text-sm">{project.description}</p>
 
-              <CaseStudyTabs project={project} />
+              <CaseStudyTabs project={project} slug={projectSlug(project.name)} />
               {project.name === "DiaPredict" && <DiaPredictPipeline project={project} />}
             </article>
           ))}

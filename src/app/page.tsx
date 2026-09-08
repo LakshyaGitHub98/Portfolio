@@ -12,11 +12,13 @@ import ScrollAnimations from "@/components/ScrollAnimations";
 import HudWrapper from "@/components/HudWrapper";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SystemLog from "@/components/SystemLog";
+import DeepLinkEffect from "@/components/DeepLinkEffect";
 import { SystemLogProvider } from "@/hooks/useSystemLog";
 
 export default function Home() {
   return (
     <SystemLogProvider>
+      <DeepLinkEffect />
       <ErrorBoundary>
         <SceneWrapper />
       </ErrorBoundary>
