@@ -73,8 +73,16 @@ export default function ContactForm() {
       <Button variant="primary">
         {status === "sending" ? "Sending..." : "Send"}
       </Button>
-      {status === "sent" && <p className="text-sm text-copper">Message sent!</p>}
-      {status === "error" && <p className="text-sm text-ember">Something went wrong. Try again.</p>}
+      {status === "sent" && (
+        <p className="text-sm text-copper" role="status" aria-live="polite">
+          Message sent!
+        </p>
+      )}
+      {status === "error" && (
+        <p className="text-sm text-ember" role="status" aria-live="assertive">
+          Something went wrong. Try again.
+        </p>
+      )}
     </form>
   );
 }

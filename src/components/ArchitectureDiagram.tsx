@@ -67,7 +67,7 @@ export default function ArchitectureDiagram() {
             ))}
           </div>
           {active && skillCategories.find((c) => c.name === cat.name)?.skills.includes(active) && DESCRIPTIONS[active] && (
-            <p className="mt-3 text-sm leading-relaxed text-fog border-l-2 border-copper pl-3">{DESCRIPTIONS[active]}</p>
+            <p className="mt-3 text-sm leading-relaxed text-fog border-l-2 border-copper pl-3" role="status" aria-live="polite">{DESCRIPTIONS[active]}</p>
           )}
         </div>
       ))}

@@ -64,7 +64,7 @@ type Props = {
 export default function Scene({ scrollProgress = 0 }: Props) {
   const { particleCount, bgParticleCount, dpr } = useViewportSize();
   return (
-    <div className="fixed inset-0 -z-10 pointer-events-none">
+    <div className="fixed inset-0 -z-10 pointer-events-none" aria-hidden="true">
       <Canvas
         dpr={dpr}
         camera={{ position: [0, 0, 5], fov: 45, near: 0.1, far: 50 }}
