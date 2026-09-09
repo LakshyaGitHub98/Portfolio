@@ -33,20 +33,26 @@ export default function HoverReticle() {
     if (!isFine) return;
 
     const onEnter = (e: PointerEvent) => {
-      const target = (e.target as HTMLElement).closest(SELECTOR);
+      const el = e.target as HTMLElement;
+      if (!el?.closest) return;
+      const target = el.closest(SELECTOR);
       if (!target) return;
       const rect = target.getBoundingClientRect();
       setReticle({ x: rect.left, y: rect.top, w: rect.width, h: rect.height });
     };
 
     const onLeave = (e: PointerEvent) => {
-      const target = (e.target as HTMLElement).closest(SELECTOR);
+      const el = e.target as HTMLElement;
+      if (!el?.closest) return;
+      const target = el.closest(SELECTOR);
       if (target) setReticle(null);
     };
 
     const onMove = (e: PointerEvent) => {
       if (!reticleRef.current) return;
-      const target = (e.target as HTMLElement).closest(SELECTOR);
+      const el = e.target as HTMLElement;
+      if (!el?.closest) return;
+      const target = el.closest(SELECTOR);
       if (target) {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = requestAnimationFrame(() => {
